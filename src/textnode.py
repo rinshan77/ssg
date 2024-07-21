@@ -1,4 +1,4 @@
-class TextNode():
+class TextNode:
     text_type_text = "text"
     text_type_bold = "bold"
     text_type_italic = "italic"
@@ -10,16 +10,20 @@ class TextNode():
         self.value = value
         self.text_type = text_type
         self.url = url
-    
+
     def __eq__(self, other):
+        if not isinstance(other, TextNode):
+            return False
         return (
-            self.value == other.value and
-            self.text_type == other.text_type and
-            self.url == other.url
+            self.value == other.value
+            and self.text_type == other.text_type
+            and self.url == other.url
         )
+
     def __repr__(self):
+
         return f"TextNode({self.value}, {self.text_type}, {self.url})"
-    
+
 
 def text_node_to_html_node(text_node):
     from htmlnode import LeafNode
@@ -39,7 +43,8 @@ def text_node_to_html_node(text_node):
     elif text_node.text_type == TextNode.text_type_image:
         if text_node.url is None:
             raise ValueError("Image TextNode must have a URL")
-        return LeafNode(tag="img", value="", props={"src": text_node.url, "alt": text_node.value})
+        return LeafNode(
+            tag="img", value="", props={"src": text_node.url, "alt": text_node.value}
+        )
     else:
         raise ValueError(f"Unknown text type for {text.node.text_type}")
-    
