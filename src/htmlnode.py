@@ -2,7 +2,7 @@ class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
-        self.children = children
+        self.children = children if children is not None else []
         self.props = props if props is not None else {}
 
     def to_html(self):
@@ -17,6 +17,22 @@ class HTMLNode:
     def __repr__(self):
         return f"Tag={self.tag!r} Value={self.value!r} Children={self.children!r} Props={self.props!r}"
 
+    def set_prop(self, key, value):
+        self.props[key] = value
+
+    def equals(self, other):
+        if not isinstance(other, HTMLNode):
+            return False
+        if self.tag != other.tag:
+            return False
+        if self.props != other.props:
+            return False
+        if len(self.children) != len(other.children):
+            return False
+        for child, other_child in zip(self.children, other.children):
+            if not child.equals(other_child):
+                return False
+        return True 
 
 class LeafNode(HTMLNode):
     def __init__(self, tag=None, value=None, props=None):
