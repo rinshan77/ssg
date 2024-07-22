@@ -1,15 +1,9 @@
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
-        self.tag = tag  # String representing tag name e.g. p, a, h1
-        self.value = (
-            value  # String representing value of tag e.g. text inside paragraph
-        )
-        self.children = (
-            children  # List of HTMLNode objects, representing the children of this node
-        )
-        self.props = (
-            props if props is not None else {}
-        )  # Dictionary representing attributes of the tag, e.g. (<a> tag) might have {"href": "https://www.google.com"}
+        self.tag = tag
+        self.value = value
+        self.children = children
+        self.props = props if props is not None else {}
 
     def to_html(self):
         raise NotImplementedError("This is a placeholder for the child classes")

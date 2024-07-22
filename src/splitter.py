@@ -11,7 +11,6 @@ def split_nodes_delimiter(old_nodes, delimiter, provided_text_type):
 
         parts = node.value.split(delimiter)
 
-        # Check for unmatched delimiters
         if len(parts) % 2 == 0:
             raise ValueError("Unmatched delimiter detected!")
 
@@ -27,6 +26,7 @@ def split_nodes_delimiter(old_nodes, delimiter, provided_text_type):
 def extract_markdown_images(text):
     return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
 
+
 def extract_markdown_links(text):
     return re.findall(r"\[(.*?)\]\((.*?)\)", text)
 
@@ -41,19 +41,15 @@ def split_nodes_image(old_nodes):
         current_text = node.value
         for alt_text, url in images:
             before, sep, after = current_text.partition(f"![{alt_text}]({url})")
-            # Append the text before the image, if it's not empty
             if before:
                 new_nodes.append(TextNode(before, node.text_type))
-            # Append the image as a new TextNode
             new_nodes.append(TextNode(alt_text, "image", url))
-            # Continue with the text after the image
             current_text = after
 
-        # Append any remaining text after the last image, if it's not empty
         if current_text:
             new_nodes.append(TextNode(current_text, node.text_type))
-    return new_nodes    
-    
+    return new_nodes
+
 
 def split_nodes_link(old_nodes):
     new_nodes = []

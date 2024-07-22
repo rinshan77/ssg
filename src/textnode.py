@@ -48,4 +48,3 @@ def text_node_to_html_node(text_node):
         )
     else:
         raise ValueError(f"Unknown text type for {text.node.text_type}")
-
