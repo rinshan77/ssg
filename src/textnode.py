@@ -6,7 +6,7 @@ class TextNode:
     text_type_link = "link"
     text_type_image = "image"
 
-    def __init__(self, value, text_type, url=None):
+    def __init__(self, value, text_type=None, url=None):
         self.value = value
         self.text_type = text_type
         self.url = url
@@ -21,10 +21,8 @@ class TextNode:
         )
 
     def __repr__(self):
-
         return f"TextNode({self.value}, {self.text_type}, {self.url})"
-
-
+    
 def text_node_to_html_node(text_node):
     from htmlnode import LeafNode
 

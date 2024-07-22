@@ -5,20 +5,13 @@ from blocktohtml import markdown_to_html_node
 
 print("Let's make this project properly!")
 
-def clean_public_dir():
-    public_dir = 'public'
-    if os.path.exists(public_dir):
-        shutil.rmtree(public_dir)
-    os.makedirs(public_dir)
+def clean_dir(dir):
+    if os.path.exists(dir):
+        shutil.rmtree(dir)
+    os.makedirs(dir)
 
-def copy_static_files():
-    static_dir = 'static'
-    public_dir = 'public'
+def copy_static_files(static_dir, public_dir):
     shutil.copytree(static_dir, public_dir, dirs_exist_ok=True)
-
-def generate_main_page():
-    generate_page('content/index.md', 'template.html', 'public/index.html')
-
 
 def extract_title(markdown):
     # Split the markdown content into lines
@@ -64,12 +57,35 @@ def generate_page(from_path, template_path, dest_path):
     
     print(f"Page generated successfully and written to {dest_path}")
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for root, dirs, files in os.walk(dir_path_content):
+        print(f"Examining directory: {root}")  # Print current directory being examined
+        for file_name in files:
+            if file_name.endswith(".md"):
+                from_path = os.path.join(root, file_name)
+                relative_path = os.path.relpath(from_path, dir_path_content)
+                relative_path = os.path.relpath(from_path, dir_path_content)
+                dest_path = os.path.join(dest_dir_path, os.path.splitext(relative_path)[0] + '.html')
+                
+                # Generate the page using the template
+                print(f"Found markdown file: {from_path}, converting to: {dest_path}")  # Debugging statement
+                generate_page(from_path, template_path, dest_path)
+
 
 def main():
-    clean_public_dir()        # Step 1: Clean the public directory
-    copy_static_files()       # Step 2: Copy static files
-    generate_main_page()      # Step 3: Generate the main page
+    static_dir = 'static'
+    public_dir = 'public'
+    content_dir = 'content'
+    template_path = 'template.html'
 
+    # Clean the public directory
+    clean_dir(public_dir)
+    
+    # Copy static files to public directory
+    copy_static_files(static_dir, public_dir)
+    
+    # Generate pages recursively for all markdown files in the content directory
+    generate_pages_recursive(content_dir, template_path, public_dir)
 
 if __name__ == "__main__":
     main()
