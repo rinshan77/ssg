@@ -20,7 +20,7 @@ def convert_link_text(text):
     link_text = parts[0].strip("[")
     link_url = parts[1].strip(")")
     link_node = HTMLNode("a", [HTMLNode("text", [link_text])])
-    link_node.set_attribute("href", link_url)
+    link_node.set_prop("href", link_url)
     return link_node
 
 
