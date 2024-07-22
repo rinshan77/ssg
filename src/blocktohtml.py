@@ -1,17 +1,16 @@
-from htmlnode import HTMLNode, LeafNode, ParentNode
-from blocks import block_to_block_type, markdown_to_blocks
+from htmlnode import LeafNode, ParentNode
 
 
 def convert_bold_text(text):
     # Remove the markdown syntax for bold
     content = text.strip("*")
-    return HTMLNode("b", [HTMLNode("text", [content])])
+    return LeafNode("b", content)
 
 
 def convert_italic_text(text):
     # Remove the markdown syntax for italic
     content = text.strip("*")
-    return HTMLNode("i", [HTMLNode("text", [content])])
+    return LeafNode("i", content)
 
 
 def convert_link_text(text):
@@ -19,7 +18,7 @@ def convert_link_text(text):
     parts = text.split("](")
     link_text = parts[0].strip("[")
     link_url = parts[1].strip(")")
-    link_node = HTMLNode("a", [HTMLNode("text", [link_text])])
+    link_node = ParentNode("a", children=[LeafNode("text", link_text)])
     link_node.set_prop("href", link_url)
     return link_node
 
@@ -27,36 +26,35 @@ def convert_link_text(text):
 def create_html_node(block, block_type):
     if block_type.startswith("heading"):
         count_hashes = block.count("#", 0, block.index(" "))
-        return HTMLNode(
-            f"h{count_hashes}", [HTMLNode("text", [block.strip("# ").strip()])]
+        return ParentNode(
+            f"h{count_hashes}", children=[LeafNode("text", block.strip("# ").strip())]
         )
     elif block_type == "code":
         code_content = block.strip("```")
-        code_node = HTMLNode("code", [HTMLNode("text", [code_content])])
-        return HTMLNode("pre", [code_node])
+        code_node = LeafNode("code", code_content)
+        return ParentNode("pre", children=[code_node])
     elif block_type == "quote":
         quote_content = block.strip("> ")
-        return HTMLNode("blockquote", text_to_children(quote_content))
+        return ParentNode("blockquote", children=text_to_children(quote_content))
     elif block_type == "unordered_list":
         items = block.split("\n")
         list_items = [
-            HTMLNode("li", text_to_children(item.strip("*- ")))
+            ParentNode("li", children=text_to_children(item.strip("*- ")))
             for item in items
             if item.strip()
         ]
-        return HTMLNode("ul", list_items)
+        return ParentNode("ul", children=list_items)
     elif block_type == "ordered_list":
         items = block.split("\n")
         list_items = [
-            HTMLNode("li", text_to_children(item.split(" ", 1)[1]))
+            ParentNode("li", children=text_to_children(item.split(" ", 1)[1]))
             for item in items
             if item.strip()
         ]
-        return HTMLNode("ol", list_items)
+        return ParentNode("ol", children=list_items)
     elif block_type == "paragraph":
-        return HTMLNode("p", text_to_children(block))
-    return HTMLNode("p", text_to_children(block))
-
+        return ParentNode("p", children=text_to_children(block))
+    return ParentNode("p", children=text_to_children(block))
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
@@ -67,9 +65,8 @@ def markdown_to_html_node(markdown):
         html_node = create_html_node(block, block_type)
         html_children.append(html_node)
 
-    parent_node = HTMLNode("div", html_children)
+    parent_node = ParentNode("div", children=html_children)
     return parent_node
-
 
 def text_to_children(text):
     children = []
@@ -82,7 +79,7 @@ def text_to_children(text):
                 children.append(convert_bold_text(text[i : end_bold + 2]))
                 i = end_bold + 2
             else:
-                children.append(HTMLNode("text", [text[i:]]))
+                children.append(LeafNode("text", text[i:]))
                 break
         elif text[i] == "*":  # Handle italic text
             end_italic = text.find("*", i + 1)
@@ -90,7 +87,7 @@ def text_to_children(text):
                 children.append(convert_italic_text(text[i : end_italic + 1]))
                 i = end_italic + 1
             else:
-                children.append(HTMLNode("text", [text[i:]]))
+                children.append(LeafNode("text", text[i:]))
                 break
         elif text[i] == "[":  # Handle links
             end_link = text.find(")", i + 1)
@@ -98,7 +95,7 @@ def text_to_children(text):
                 children.append(convert_link_text(text[i : end_link + 1]))
                 i = end_link + 1
             else:
-                children.append(HTMLNode("text", [text[i:]]))
+                children.append(LeafNode("text", text[i:]))
                 break
         else:  # Handle normal text
             next_special = min(
@@ -113,7 +110,33 @@ def text_to_children(text):
                 ],
                 default=len(text),
             )
-            children.append(HTMLNode("text", [text[i:next_special]]))
-            i = next_special
+            if next_special != i:
+                children.append(LeafNode("text", text[i:next_special]))
+                i = next_special
+            else:
+                i = next_special
 
-    return children
+        return children
+
+def markdown_to_blocks(markdown):
+    # A very simple markdown block splitter
+    return markdown.split("\n\n")
+
+
+def block_to_block_type(block):
+    if block.startswith("### "):
+        return "heading3"
+    elif block.startswith("## "):
+        return "heading2"
+    elif block.startswith("# "):
+        return "heading1"
+    elif block.startswith("```"):
+        return "code"
+    elif block.startswith("> "):
+        return "quote"
+    elif block.startswith("* ") or block.startswith("- "):
+        return "unordered_list"
+    elif block[0].isdigit() and block[1:][:2] == ". ":
+        return "ordered_list"
+    else:
+        return "paragraph"
