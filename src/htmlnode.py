@@ -32,7 +32,8 @@ class HTMLNode:
         for child, other_child in zip(self.children, other.children):
             if not child.equals(other_child):
                 return False
-        return True 
+        return True
+
 
 class LeafNode(HTMLNode):
     def __init__(self, tag=None, value=None, props=None):
