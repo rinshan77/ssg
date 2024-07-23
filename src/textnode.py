@@ -24,14 +24,12 @@ class TextNode:
         return f"TextNode({self.value}, {self.text_type}, {self.url})"
     
 def text_node_to_html_node(text_node):
-    from htmlnode import LeafNode
-
     if text_node.text_type == TextNode.text_type_text:
         return LeafNode(value=text_node.value)
     elif text_node.text_type == TextNode.text_type_bold:
-        return LeafNode(tag="b", value=text_node.value)
+        return LeafNode(tag="strong", value=text_node.value)
     elif text_node.text_type == TextNode.text_type_italic:
-        return LeafNode(tag="i", value=text_node.value)
+        return LeafNode(tag="em", value=text_node.value)
     elif text_node.text_type == TextNode.text_type_code:
         return LeafNode(tag="code", value=text_node.value)
     elif text_node.text_type == TextNode.text_type_link:
@@ -45,4 +43,6 @@ def text_node_to_html_node(text_node):
             tag="img", value="", props={"src": text_node.url, "alt": text_node.value}
         )
     else:
-        raise ValueError(f"Unknown text type for {text.node.text_type}")
+        raise ValueError(f"Unknown text type for {text_node.text_type}")
+
+
