@@ -2,19 +2,16 @@ from htmlnode import LeafNode, ParentNode
 
 
 def convert_bold_text(text):
-    # Remove the markdown syntax for bold
     content = text.strip("*")
     return LeafNode("b", content)
 
 
 def convert_italic_text(text):
-    # Remove the markdown syntax for italic
     content = text.strip("*")
     return LeafNode("i", content)
 
 
 def convert_link_text(text):
-    # Extract text and URL from the markdown link syntax
     parts = text.split("](")
     link_text = parts[0].strip("[")
     link_url = parts[1].strip(")")
@@ -76,7 +73,7 @@ def text_to_children(text):
     length = len(text)
 
     while i < length:
-        if text[i : i + 2] == "**":  # Bold text
+        if text[i : i + 2] == "**":
             end_bold = text.find("**", i + 2)
             if end_bold != -1:
                 children.append(LeafNode("strong", text[i + 2 : end_bold]))
@@ -84,7 +81,7 @@ def text_to_children(text):
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "*":  # Italic text
+        elif text[i] == "*":
             end_italic = text.find("*", i + 1)
             if end_italic != -1:
                 children.append(LeafNode("em", text[i + 1 : end_italic]))
@@ -92,7 +89,7 @@ def text_to_children(text):
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "[":  # Links
+        elif text[i] == "[":
             end_link = text.find(")", i + 1)
             if end_link != -1:
                 link_text, link_url = text[i + 1 : end_link].split("](")
@@ -101,7 +98,7 @@ def text_to_children(text):
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "!":  # Images
+        elif text[i] == "!":
             end_image = text.find(")", i + 1)
             if end_image != -1:
                 img_text, img_url = text[i + 2 : end_image].split("](")
@@ -110,7 +107,7 @@ def text_to_children(text):
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        else:  # Normal text
+        else:
             next_special = min(
                 [
                     idx
@@ -134,7 +131,6 @@ def text_to_children(text):
 
 
 def markdown_to_blocks(markdown):
-    # A very simple markdown block splitter
     return markdown.split("\n\n")
 
 
