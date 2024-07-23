@@ -1,7 +1,6 @@
 import os
 import shutil
 from textnode import TextNode
-from blocktohtml import markdown_to_html_node
 from blocks import markdown_to_html_node
 from pathlib import Path
 
