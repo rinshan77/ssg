@@ -1,5 +1,11 @@
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
+text_type_text = "text"
+text_type_bold = "bold"
+text_type_italic = "italic"
+text_type_code = "code"
+text_type_link = "link"
+text_type_image = "image"
 
 class TextNode:
 
@@ -28,22 +34,19 @@ class TextNode:
         return f"TextNode({self.value}, {self.text_type}, {self.url})"
 
 
+
 def text_node_to_html_node(text_node):
-    if text_node.text_type == TextNode.text_type_text:
-        return LeafNode("text", text_node.value)
-    elif text_node.text_type == TextNode.text_type_bold:
-        return LeafNode("strong", text_node.value)
-    elif text_node.text_type == TextNode.text_type_italic:
-        return LeafNode("em", text_node.value)
-    elif text_node.text_type == TextNode.text_type_code:
+
+    if text_node.text_type == text_type_text:
+        return LeafNode(None, text_node.value)
+    if text_node.text_type == text_type_bold:
+        return LeafNode("b", text_node.value)
+    if text_node.text_type == text_type_italic:
+        return LeafNode("i", text_node.value)
+    if text_node.text_type == text_type_code:
         return LeafNode("code", text_node.value)
-    elif text_node.text_type == TextNode.text_type_link:
-        if text_node.url is None:
-            raise ValueError("Link TextNode must have a URL")
+    if text_node.text_type == text_type_link:
         return LeafNode("a", text_node.value, {"href": text_node.url})
-    elif text_node.text_type == TextNode.text_type_image:
-        if text_node.url is None:
-            raise ValueError("Image TextNode must have a URL")
+    if text_node.text_type == text_type_image:
         return LeafNode("img", "", {"src": text_node.url, "alt": text_node.value})
-    else:
-        raise ValueError(f"Unknown text type for {text_node.text_type}")
+    raise ValueError(f"Invalid text type: {text_node.text_type}")

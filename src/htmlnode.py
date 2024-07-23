@@ -16,23 +16,24 @@ class HTMLNode:
         raise NotImplementedError("This is a placeholder for the child classes")
     
     def props_to_html(self):
-        string = ""
-        for key, value in self.props.items():
-            string += f' {key}="{value}"'
-        return string
+        if self.props is None:
+            return ""
+        props_html = ""
+        for prop in self.props:
+            props_html += f' {prop}="{self.props[prop]}"'
+        return props_html
 
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag=None, value=None, props=None):
-        super().__init__(tag, value, [], props)
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
 
-    def props_to_html(self):
-        if not self.props:
-            return ""
-        return " " + " ".join([f'{key}="{value}"' for key, value in self.props.items()])
+    def __repr__(self):
+        return f"LeafNode({self.tag}, {self.value}, {self.props})"
+
 
     def to_html(self):
-        if not self.value and self.tag != "img":
+        if self.value is None and self.tag != "img":
             raise ValueError("LeafNodes MUST have a value")
         if self.tag is None:
             return self.value
@@ -44,10 +45,8 @@ class LeafNode(HTMLNode):
 
 
 class ParentNode(HTMLNode):
-    def __init__(self, tag, value=None, children=None, props=None):
-        if children is None:
-            children = []
-        super().__init__(tag, value, children, props)
+    def __init__(self, tag, children=None, props=None):
+        super().__init__(tag, None, children, props)
 
     def to_html(self):
         if not self.tag:
@@ -55,5 +54,10 @@ class ParentNode(HTMLNode):
         if not self.children:
             raise ValueError("ParentNodes MUST have children")
 
-        children_html = "".join([child.to_html() for child in self.children])
+        children_html = ""
+        for child in self.children:
+            children_html += child.to_html()
         return f"<{self.tag}{self.props_to_html()}>{children_html}</{self.tag}>"
+
+    def __repr__(self):
+        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
