@@ -5,10 +5,10 @@ from blocktohtml import markdown_to_html_node
 from blocks import markdown_to_html_node
 from pathlib import Path
 
-dir_path_static = "/home/simon/workspace/github.com/rinshan77/ssg/static"
-dir_path_public = "/home/simon/workspace/github.com/rinshan77/ssg/public"
-dir_path_content = "/home/simon/workspace/github.com/rinshan77/ssg/content"
-template_path = "/home/simon/workspace/github.com/rinshan77/ssg/template.html"
+dir_path_static = "./static"
+dir_path_public = "./public"
+dir_path_content = "./content"
+template_path = "./template.html"
 
 
 def copy_files_recursive(source_dir_path, dest_dir_path):
