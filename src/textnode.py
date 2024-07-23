@@ -1,6 +1,8 @@
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
+
 class TextNode:
+
     text_type_text = "text"
     text_type_bold = "bold"
     text_type_italic = "italic"
@@ -8,7 +10,7 @@ class TextNode:
     text_type_link = "link"
     text_type_image = "image"
 
-    def __init__(self, value, text_type=None, url=None):
+    def __init__(self, value, text_type, url=None):
         self.value = value
         self.text_type = text_type
         self.url = url

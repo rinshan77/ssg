@@ -24,7 +24,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
         markdown = "[Example](http://example.com)"
         expected_html = HTMLNode(
             "div",
-            [
+            children= [
                 HTMLNode(
                     "a",
                     [HTMLNode("text", ["Example"])],
@@ -33,7 +33,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             ],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_paragraph_with_bold_and_italic(self):
         markdown = "This is **bold** and *italic* text."
@@ -53,7 +53,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             ],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_unordered_list(self):
         markdown = "- Item 1\n- Item 2\n- Item 3"
@@ -71,7 +71,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             ],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_ordered_list(self):
         markdown = "1. First Item\n2. Second Item\n3. Third Item"
@@ -89,7 +89,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             ],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_blockquote(self):
         markdown = "> This is a quote."
@@ -97,7 +97,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             "div", [HTMLNode("blockquote", [HTMLNode("text", ["This is a quote."])])]
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_code_block(self):
         markdown = "```\ncode block\n```"
@@ -106,7 +106,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             [HTMLNode("pre", [HTMLNode("code", [HTMLNode("text", ["code block"])])])],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_mixed_content(self):
         markdown = "# Heading\nParagraph with **bold** and *italic* text.\n- List item"
@@ -128,7 +128,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             ],
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
 
 if __name__ == "__main__":

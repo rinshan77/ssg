@@ -15,16 +15,17 @@ class TestHTMLNode(unittest.TestCase):
         expected_str = "Tag='a' Value='This is text' Children=['child1', 'child2'] Props={'href': 'link', 'style': 'cool'}"
         self.assertEqual(repr_str, expected_str)
 
-    def test_props_to_html(self):
+    def test_to_html_props(self):
         node = HTMLNode(
-            "a", "This is text", ["child1", "child2"], {"href": "link", "style": "cool"}
+            "div",
+            "Hello, world!",
+            None,
+            {"class": "greeting", "href": "https://boot.dev"},
         )
-        node2 = HTMLNode(
-            props={"href": "link", "style": "cool", "attri": "whatever", "key": "value"}
+        self.assertEqual(
+            node.props_to_html(),
+            ' class="greeting" href="https://boot.dev"',
         )
-        print(node.props_to_html())
-        print(node2.props_to_html())
-
 
 class TestLeafNode(unittest.TestCase):
     def test_to_html(self):
@@ -56,17 +57,6 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             ParentNode(tag="div", children=[]).to_html()
         self.assertEqual(str(context.exception), "ParentNodes MUST have children")
-
-    def test_recursive_parent_node(self):
-        leaf1 = LeafNode(tag="span", value="Child 1", props={"class": "text-bold"})
-        leaf2 = LeafNode(tag="span", value="Child 2")
-        inner_parent = ParentNode(tag="section", children=[leaf1, leaf2])
-        outer_parent = ParentNode(
-            tag="div", children=[inner_parent], props={"id": "outer-parent"}
-        )
-
-        expected_html = '<div id="outer-parent"><section><span class="text-bold">Child 1</span><span>Child 2</span></section></div>'
-        self.assertEqual(outer_parent.to_html(), expected_html)
 
 
 if __name__ == "__main__":

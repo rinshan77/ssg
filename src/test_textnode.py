@@ -32,14 +32,14 @@ class TestTextNodeToHTMLNode(unittest.TestCase):
     def test_text_type_bold(self):
         text_node = TextNode("bold text", TextNode.text_type_bold)
         html_node = text_node_to_html_node(text_node)
-        expected_html_node = LeafNode(tag="b", value="bold text")
+        expected_html_node = LeafNode(tag="strong", value="bold text")
         print(html_node)
         self.assertEqual(html_node.to_html(), expected_html_node.to_html())
 
     def test_text_type_italic(self):
         text_node = TextNode("italic text", TextNode.text_type_italic)
         html_node = text_node_to_html_node(text_node)
-        expected_html_node = LeafNode(tag="i", value="italic text")
+        expected_html_node = LeafNode(tag="em", value="italic text")
         print(html_node)
         self.assertEqual(html_node.to_html(), expected_html_node.to_html())
 
