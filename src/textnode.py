@@ -1,3 +1,5 @@
+from htmlnode import HTMLNode, LeafNode, ParentNode
+
 class TextNode:
     text_type_text = "text"
     text_type_bold = "bold"
@@ -22,27 +24,24 @@ class TextNode:
 
     def __repr__(self):
         return f"TextNode({self.value}, {self.text_type}, {self.url})"
-    
+
+
 def text_node_to_html_node(text_node):
     if text_node.text_type == TextNode.text_type_text:
-        return LeafNode(value=text_node.value)
+        return LeafNode("text", text_node.value)
     elif text_node.text_type == TextNode.text_type_bold:
-        return LeafNode(tag="strong", value=text_node.value)
+        return LeafNode("strong", text_node.value)
     elif text_node.text_type == TextNode.text_type_italic:
-        return LeafNode(tag="em", value=text_node.value)
+        return LeafNode("em", text_node.value)
     elif text_node.text_type == TextNode.text_type_code:
-        return LeafNode(tag="code", value=text_node.value)
+        return LeafNode("code", text_node.value)
     elif text_node.text_type == TextNode.text_type_link:
         if text_node.url is None:
             raise ValueError("Link TextNode must have a URL")
-        return LeafNode(tag="a", value=text_node.value, props={"href": text_node.url})
+        return LeafNode("a", text_node.value, {"href": text_node.url})
     elif text_node.text_type == TextNode.text_type_image:
         if text_node.url is None:
             raise ValueError("Image TextNode must have a URL")
-        return LeafNode(
-            tag="img", value="", props={"src": text_node.url, "alt": text_node.value}
-        )
+        return LeafNode("img", "", {"src": text_node.url, "alt": text_node.value})
     else:
         raise ValueError(f"Unknown text type for {text_node.text_type}")
-
-

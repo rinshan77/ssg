@@ -5,8 +5,6 @@ class HTMLNode:
         self.children = children if children is not None else []
         self.props = props if props is not None else {}
 
-
-
     def props_to_html(self):
         string = ""
         for key, value in self.props.items():
@@ -35,7 +33,8 @@ class HTMLNode:
 
     def to_html(self):
         raise NotImplementedError("This is a placeholder for the child classes")
-        
+
+
 class LeafNode(HTMLNode):
     def __init__(self, tag=None, value=None, props=None):
         super().__init__(tag, value, [], props)
@@ -52,6 +51,8 @@ class LeafNode(HTMLNode):
             return self.value
         if self.tag in ["img", "br"]:
             return f"<{self.tag}{self.props_to_html()} />"
+        if self.tag == "text":
+            return self.value
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
 

@@ -18,7 +18,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
             "div", [HTMLNode("h1", [HTMLNode("text", ["Heading 1"])])]
         )
         result = markdown_to_html_node(markdown)
-        self.assertTrue(result.equals(expected_html))
+        self.assertEqual(result, expected_html)
 
     def test_link(self):
         markdown = "[Example](http://example.com)"

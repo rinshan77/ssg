@@ -57,7 +57,6 @@ def create_html_node(block, block_type):
     return ParentNode("p", children=text_to_children(block))
 
 
-
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     html_children = []
@@ -70,48 +69,48 @@ def markdown_to_html_node(markdown):
     parent_node = ParentNode("div", children=html_children)
     return parent_node
 
-def text_to_children(text):
-    from textnode import TextNode
 
+def text_to_children(text):
     children = []
     i = 0
+    length = len(text)
 
-    while i < len(text):
-        if text[i : i + 2] == "**":  # Handle bold text
+    while i < length:
+        if text[i : i + 2] == "**":  # Bold text
             end_bold = text.find("**", i + 2)
             if end_bold != -1:
-                children.append(LeafNode("strong", text[i + 2:end_bold]))
+                children.append(LeafNode("strong", text[i + 2 : end_bold]))
                 i = end_bold + 2
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "*":  # Handle italic text
+        elif text[i] == "*":  # Italic text
             end_italic = text.find("*", i + 1)
             if end_italic != -1:
-                children.append(LeafNode("em", text[i + 1:end_italic]))
+                children.append(LeafNode("em", text[i + 1 : end_italic]))
                 i = end_italic + 1
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "[":  # Handle links
+        elif text[i] == "[":  # Links
             end_link = text.find(")", i + 1)
             if end_link != -1:
-                link_text, link_url = text[i + 1:end_link].split("](")
+                link_text, link_url = text[i + 1 : end_link].split("](")
                 children.append(LeafNode("a", link_text, {"href": link_url}))
                 i = end_link + 1
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        elif text[i] == "!":  # Handle images
+        elif text[i] == "!":  # Images
             end_image = text.find(")", i + 1)
             if end_image != -1:
-                img_text, img_url = text[i + 2:end_image].split("](")
+                img_text, img_url = text[i + 2 : end_image].split("](")
                 children.append(LeafNode("img", "", {"src": img_url, "alt": img_text}))
                 i = end_image + 1
             else:
                 children.append(LeafNode("text", text[i:]))
                 break
-        else:  # Handle normal text
+        else:  # Normal text
             next_special = min(
                 [
                     idx
@@ -119,20 +118,19 @@ def text_to_children(text):
                         text.find("**", i),
                         text.find("*", i),
                         text.find("[", i),
-                        text.find("![" , i),
+                        text.find("![", i),
                     ]
                     if idx != -1
                 ],
-                default=len(text),
+                default=length,
             )
             if next_special != i:
                 children.append(LeafNode("text", text[i:next_special]))
                 i = next_special
             else:
-                i = next_special
+                i = length
 
     return children
-
 
 
 def markdown_to_blocks(markdown):
