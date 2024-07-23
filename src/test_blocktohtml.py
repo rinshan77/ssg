@@ -24,7 +24,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
         markdown = "[Example](http://example.com)"
         expected_html = HTMLNode(
             "div",
-            children= [
+            children=[
                 HTMLNode(
                     "a",
                     [HTMLNode("text", ["Example"])],

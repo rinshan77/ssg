@@ -2,9 +2,8 @@ class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
-        self.children = children 
-        self.props = props 
-
+        self.children = children
+        self.props = props
 
     def __repr__(self):
         return f"Tag={self.tag!r} Value={self.value!r} Children={self.children!r} Props={self.props!r}"
@@ -14,7 +13,7 @@ class HTMLNode:
 
     def to_html(self):
         raise NotImplementedError("This is a placeholder for the child classes")
-    
+
     def props_to_html(self):
         if self.props is None:
             return ""
@@ -30,7 +29,6 @@ class LeafNode(HTMLNode):
 
     def __repr__(self):
         return f"LeafNode({self.tag}, {self.value}, {self.props})"
-
 
     def to_html(self):
         if self.value is None and self.tag != "img":

@@ -27,6 +27,7 @@ class TestHTMLNode(unittest.TestCase):
             ' class="greeting" href="https://boot.dev"',
         )
 
+
 class TestLeafNode(unittest.TestCase):
     def test_repr(self):
         node = HTMLNode(
@@ -46,7 +47,8 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_no_tag(self):
         node = LeafNode(None, "Hello, world!")
-        self.assertEqual(node.to_html(), "Hello, world!")  
+        self.assertEqual(node.to_html(), "Hello, world!")
+
 
 class TestParentNode(unittest.TestCase):
     def test_to_html_no_children(self):
@@ -100,6 +102,7 @@ class TestParentNode(unittest.TestCase):
             node.to_html(),
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
+
 
 if __name__ == "__main__":
     unittest.main()
