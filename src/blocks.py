@@ -9,6 +9,7 @@ from splitter import text_to_textnodes
 from textnode import text_node_to_html_node
 from htmlnode import LeafNode, ParentNode
 
+
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
     filtered_blocks = []
@@ -57,6 +58,7 @@ def block_to_block_type(block):
             i += 1
         return block_type_olist
     return block_type_paragraph
+
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)

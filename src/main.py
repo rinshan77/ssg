@@ -47,8 +47,9 @@ def generate_page(from_path, template_path, dest_path):
         os.makedirs(dest_dir_path, exist_ok=True)
     to_file = open(dest_path, "w")
     to_file.write(template)
-    
+
     print(f"Page generated successfully and written to {dest_path}")
+
 
 def extract_title(md):
     lines = md.split("\n")
@@ -79,6 +80,7 @@ def main():
 
     print("Generating content...")
     generate_pages_recursive(dir_path_content, template_path, dir_path_public)
+
 
 if __name__ == "__main__":
     main()
