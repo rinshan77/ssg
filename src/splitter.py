@@ -1,4 +1,5 @@
 from textnode import TextNode
+from htmlnode import LeafNode, ParentNode
 import re
 
 text_type_text = "text"
